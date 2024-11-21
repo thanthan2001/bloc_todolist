@@ -11,7 +11,7 @@ class TodoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final todoBloc = context.read<TodoBloc>();
-
+    todoBloc.add(const LoadTodos(0, 10));
     return Scaffold(
       appBar: AppBar(
         title: const Text("Todos"),
@@ -25,7 +25,6 @@ class TodoPage extends StatelessWidget {
                   return const Center(child: CircularProgressIndicator());
                 } else if (state is TodoLoaded) {
                   final todos = state.todos;
-
                   return ListView.builder(
                     itemCount: todos.length,
                     itemBuilder: (context, index) {
@@ -72,17 +71,15 @@ class TodoPage extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () => _showAddEditTodoDialog(context, todoBloc),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue, // Màu nền
+                backgroundColor: Colors.blue,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0), // Bo góc
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                padding: const EdgeInsets.symmetric(
-                    vertical: 15.0), // Tăng độ cao nút
+                padding: const EdgeInsets.symmetric(vertical: 15.0),
               ),
               child: const Text(
                 "Add Todo",
-                style: TextStyle(
-                    fontSize: 16.0, color: Colors.white), // Chỉnh sửa font chữ
+                style: TextStyle(fontSize: 16.0, color: Colors.white),
               ),
             ),
           )

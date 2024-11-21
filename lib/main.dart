@@ -16,10 +16,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => getIt<TodoBloc>()),
-      ],
+    return BlocProvider(
+      create: (_) => getIt<TodoBloc>(), // Chỉ sử dụng một BlocProvider
       child: MaterialApp(
         title: 'Todo List App',
         theme: ThemeData(

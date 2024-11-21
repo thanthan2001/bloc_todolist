@@ -50,27 +50,19 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   }
 
   void _onEditTodo(EditTodo event, Emitter<TodoState> emit) async {
-    // Handle edit todo
+    try {
+      await editTodo(event.todo);
+      final todos = await getTodos(0, 10);
+      emit(TodoLoaded(todos: todos));
+    } catch (e) {
+      emit(TodoError(message: e.toString()));
+    }
   }
-  // void _onRemoveTodo(RemoveTodo event, Emitter<TodoState> emit) async {
-  //   print("REMOVE REMOVE REMOVE");
-  //   try {
-  //     await removeTodo(event.id);
-  //     final todos = await getTodos(0, 10); // Adjust as needed
-  //     emit(TodoLoaded(todos: todos));
-  //   } catch (e) {
-  //     emit(TodoError(message: e.toString()));
-  //   }
-  // }
+
   void _onRemoveTodo(RemoveTodo event, Emitter<TodoState> emit) async {
     try {
-      // Xóa todo
       await removeTodo(event.id);
-
-      // Lấy lại danh sách todos sau khi xóa
-      final todos = await getTodos(0, 10); // Lấy lại danh sách todos từ index 0
-
-      // Phát lại TodoLoaded với danh sách todos mới
+      final todos = await getTodos(0, 10);
       emit(TodoLoaded(todos: todos));
     } catch (e) {
       emit(TodoError(message: e.toString()));
