@@ -1,3 +1,5 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:bloc_todo_test_v2/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bloc_todo_test_v2/presentation/blocs/todo_bloc.dart';
@@ -5,8 +7,21 @@ import 'package:bloc_todo_test_v2/presentation/blocs/todo_event.dart';
 import 'package:bloc_todo_test_v2/presentation/blocs/todo_state.dart';
 import 'package:bloc_todo_test_v2/domain/entities/todo.dart';
 
+@RoutePage()
 class TodoPage extends StatelessWidget {
   const TodoPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => getIt<TodoBloc>(),
+      child: const _TodoView(),
+    );
+  }
+}
+
+class _TodoView extends StatelessWidget {
+  const _TodoView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +44,6 @@ class TodoPage extends StatelessWidget {
                     itemCount: todos.length,
                     itemBuilder: (context, index) {
                       final todo = todos[index];
-
                       return ListTile(
                         title: Text(todo.title ?? ""),
                         subtitle: Text(todo.description ?? ""),
@@ -129,7 +143,6 @@ class TodoPage extends StatelessWidget {
               if (title.isEmpty || description.isEmpty) return;
 
               if (isEdit) {
-                // Edit existing todo
                 todoBloc.add(EditTodo(
                   todo: Todo(
                     id: todo?.id,
@@ -139,7 +152,6 @@ class TodoPage extends StatelessWidget {
                   ),
                 ));
               } else {
-                // Add new todo
                 todoBloc.add(AddTodo(
                   todo: Todo(
                     title: title,
@@ -148,7 +160,6 @@ class TodoPage extends StatelessWidget {
                   ),
                 ));
               }
-
               Navigator.of(context).pop();
             },
             child: const Text("Save"),
